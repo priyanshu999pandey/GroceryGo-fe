@@ -4,6 +4,7 @@ import { handleAddItemCart } from "../store/cartProductSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {priceWithDiscount} from "../utils/Discount.js"
+import { handleAddress } from "../store/addressSlice.js";
 // import { handleAddItemCart } from "../store/cartProductSlice";
 
 export const GlobalContext = createContext(null);
@@ -91,7 +92,17 @@ const GlobalProvider = ({ children }) => {
    const handleLogout = ()=>{
            localStorage.clear()
            dispatch(handleAddItemCart([]))
-       }
+   };
+
+   const fetchAddress = async()=>{
+    try {
+        const res = await Axios.get("/address/get")
+        console.log("address--->",res.data.data)
+        dispatch(handleAddress(res?.data?.data))
+    } catch (error) {
+      console.log(error)
+    }
+   }
   
     useEffect(()=>{
          calculateCartItem()
@@ -99,7 +110,8 @@ const GlobalProvider = ({ children }) => {
 
     useEffect(() => {
         fetchCartData();
-        handleLogout()
+        handleLogout();
+        fetchAddress()
     },[user]);
 
   return (
@@ -111,7 +123,8 @@ const GlobalProvider = ({ children }) => {
         cartQuantity,
         price,
         priceWithoutDiscount,
-        cartQuantity
+        cartQuantity,
+        fetchAddress
       }}
     >
       {children}

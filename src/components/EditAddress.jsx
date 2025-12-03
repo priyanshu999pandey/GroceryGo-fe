@@ -4,19 +4,24 @@ import Axios from "../utils/Axios";
 import { handleAddress } from "../store/addressSlice";
 import { useDispatch } from "react-redux";
 import { useGlobalContext } from "../provider/GlobalProvider";
+import toast from "react-hot-toast";
 
-const AddAddress = ({ close }) => {
+const EditAddress = ({ close, Data }) => {
+    console.log("Data",Data)
     const [loading,setLoading] = useState(false)
     const {fetchAddress} = useGlobalContext()
     const dispatch = useDispatch()
+
   const [data, setData] = useState({
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
-    mobile:"",
-    country: "",
+    address:Data?.address_line,
+    city: Data?.city,
+    state: Data?.state,
+    pincode:Data.pincode,
+    mobile:Data.mobile,
+    country:Data.country,
+    _id:Data._id
   });
+//   console.log("Edit data",data)
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -32,11 +37,12 @@ const AddAddress = ({ close }) => {
     e.preventDefault();
 
     try {
-      const res = await Axios.post("/address/create", data);
+      const res = await Axios.put("/address/update-address", data);
       console.log("address ka data", res);
 
       if (res?.data?.success) {
           // dispatch(handleAddress(res?.data?.data))
+          toast.success(res?.data?.message)
           fetchAddress()
         setData({
           address: "",
@@ -45,6 +51,7 @@ const AddAddress = ({ close }) => {
           pincode: "",
           mobile:"",
           country: "",
+          _id:"",
         });
          close(false)
       }
@@ -58,13 +65,13 @@ const AddAddress = ({ close }) => {
         
     }
   };
-  console.log("ADD adress data", data);
+//   console.log("ADD adress data", data);
 
   return (
     <div className="w-full h-full py-10 bg-black/80 fixed top-0 bottom-0 left-0 right-0 flex justify-center  z-80  ">
       <div className="  w-full max-w-sm bg-white  p-4">
         <div className="flex justify-between items-center mb-5">
-          <h2 className="font-medium text-center text-xl"> Add Address</h2>
+          <h2 className="font-medium text-center text-xl"> Edit Address</h2>
           <p onClick={() => close(false)}>
             <IoMdClose className="hover:text-red-500 text-3xl" />
           </p>
@@ -165,4 +172,4 @@ const AddAddress = ({ close }) => {
   );
 };
 
-export default AddAddress;
+export default EditAddress;

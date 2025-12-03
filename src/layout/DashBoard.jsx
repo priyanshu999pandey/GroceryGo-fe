@@ -83,7 +83,7 @@ const DashBoard = () => {
           </Link>
 
           <Link
-            to={"save-address"}
+            to={"address"}
             className="text-md text-gray-500 py-2 hover:bg-amber-500 rounded-sm w-full mt-4 px-2 hover:text-white"
           >
             Save address

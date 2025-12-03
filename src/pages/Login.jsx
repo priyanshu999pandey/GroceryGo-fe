@@ -49,10 +49,10 @@ const Login = () => {
         }
       );
 
-      console.log("Response:", res.status, res.data);
+      // console.log("Response:", res.status, res.data);
 
       if (res.status === 201 || res.data?.success) {
-        console.log("before dispatch",res.data.data?.user)
+        // console.log("before dispatch",res.data.data?.user)
         dispatch(setUserDetails(res.data.data?.user))
         toast.success(res.data?.message || "Registered successfully!");
         localStorage.setItem('accessToken',res.data.data.accessToken);

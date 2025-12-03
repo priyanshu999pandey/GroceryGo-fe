@@ -11,7 +11,7 @@ const AccountMenu = (props) => {
     const dispatch = useDispatch();
     const {user} = useSelector((state)=>state?.user)
     useEffect(()=>{})
-    console.log(user)
+    // console.log(user)
 
     const handleLogout = async()=>{
         try {
@@ -38,7 +38,7 @@ const AccountMenu = (props) => {
     </div>
 
     <Link to={"/dashboard/my-orders"} onClick={()=>props?.setIsOpenMenu(false)} className=' text-sm  text-gray-500 py-1 hover:bg-amber-500 rounded-sm w-full mt-1 px-2 hover:text-white ' >My orders</Link>
-    <Link onClick={()=>props?.setIsOpenMenu(false)} className=' text-sm  text-gray-500 py-1 hover:bg-amber-500 rounded-sm w-full mt-1 px-2 hover:text-white ' >Save address</Link>
+    <Link to={"/dashboard/address"} onClick={()=>props?.setIsOpenMenu(false)} className=' text-sm  text-gray-500 py-1 hover:bg-amber-500 rounded-sm w-full mt-1 px-2 hover:text-white ' >Save address</Link>
     <Link  className=' text-sm  text-gray-500 py-1 hover:bg-amber-500 rounded-sm w-full mt-1 px-2 hover:text-white 'onClick={handleLogout} >Logout</Link>
     
     </div>

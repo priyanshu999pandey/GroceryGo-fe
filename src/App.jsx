@@ -36,12 +36,13 @@ import GlobalProvider from './provider/GlobalProvider'
 import AddToCartMobileLink from './components/AddToCartMobileLink'
 import ViewCart from './pages/ViewCart'
 import CheckOutPage from './pages/CheckOutPage'
+import Address from './pages/Address'
 
 
 function App() {
 
   const path = useLocation()
-  console.log("path",path)
+  // console.log("path",path)
 
   const loading = useSelector((state)=>state.product.loadingCategory)
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ function App() {
           <Route path='/' element={<Home></Home>} />
           <Route path='/search' element={<SearchPage></SearchPage>} />
           <Route path='/register' element={<Register />} />
+         
           <Route path='/login' element={<Login />} />
           <Route path='/otp-verification' element={<OtpVerification />} />
           <Route path='/forget-password' element={<ForgetPassword />} />
@@ -102,6 +104,7 @@ function App() {
           <Route path='/product/:product' element={<ProductDisplayPage/>} />
 
           <Route path='/dashboard' element={<DashBoard />} >
+           <Route path='address' element={<Address />} />
             <Route index element={<Profile />} />
             <Route path='profile' element={<Profile />} />
             <Route path='my-orders' element={<Myorders />} />

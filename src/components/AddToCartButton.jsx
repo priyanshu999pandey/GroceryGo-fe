@@ -16,7 +16,7 @@ const AddToCartButton = ({data}) => {
 
   const cartItems = useSelector((state)=>state.cart.cartItem)
 
-  console.log(data);  
+  // console.log(data);  
   
   // console.log("cardData",data)
   // console.log("cardItems",cartItems)
