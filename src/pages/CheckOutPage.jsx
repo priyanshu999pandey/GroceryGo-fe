@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 import Axios from "../utils/Axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-// NOTE: removed loadStripe import because we no longer use stripe.redirectToCheckout
-// import {loadStripe} from "@stripe/stripe-js"
 
 const CheckOutPage = () => {
   const { priceWithoutDiscount, price, cartQuantity, fetchCartData,fetchOrderDetails } =
@@ -16,11 +14,6 @@ const CheckOutPage = () => {
   const addressList = useSelector((state) => state.address.address);
   const [selectedAddress, setSelectedAddress] = useState(0);
   const cartItemList = useSelector((state) => state.cart.cartItem);
-
-  // DEBUG
-  // console.log("cartItems", cartItemList);
-  // console.log("cartItems", price);
-  // console.log(addressList[selectedAddress]);
 
   const handleCashOnDelivery = async () => {
     try {
@@ -50,29 +43,19 @@ const CheckOutPage = () => {
   const handleOnlinePayment = async () => {
     try {
       // ---------- CLIENT-SIDE GUARDS (NEW) ----------
-      // 1) ensure cart not empty
       if (!cartItemList || cartItemList.length === 0) {
         toast.error("Your cart is empty");
         return;
       }
-
-      // 2) ensure address is selected
       if (!addressList[selectedAddress]) {
         toast.error("Please select an address");
         return;
       }
-
-      // 3) minimum order guard (in rupees)
-      // Stripe requires a minimum equivalent to $0.50; using a safe local minimum avoids conversion pitfalls.
-      // I set this to ₹50. Change MIN_ORDER_RUPEES if you want a different threshold.
       const MIN_ORDER_RUPEES = 50;
       if (!price || Number(price) < MIN_ORDER_RUPEES) {
         toast.error(`Minimum order value is ₹${MIN_ORDER_RUPEES}. Add more items.`);
         return;
       }
-      // ---------- end guards ----------
-
-      // Create checkout session on your server
       const res = await Axios.post("/order/checkout", {
         list_items: cartItemList,
         addressId: addressList[selectedAddress]?._id,
@@ -81,29 +64,18 @@ const CheckOutPage = () => {
       });
 
       console.log("Checkout create response:", res?.data);
-      
-
       const session = res?.data;
 
-      // Prefer session.url (current Stripe recommended approach). If your server
-      // returns only id (old style) you should update the server to return url.
       if (session?.url) {
-        // full page redirect to Stripe hosted Checkout
         window.location.href = session.url;
         return;
       }
-
-      // fallback if server returned older session.id only
       if (session?.id) {
-        // Option A: ask server to return session.url instead (preferred).
-        // Option B: open a page that constructs a POST to Stripe to get URL;
-        // but simplest explaination: update server to return session.url.
         toast.error("Payment session created but no redirect URL returned. Update server to return session.url");
         console.error("Session returned but no url:", session);
         return;
       }
 
-      // unexpected
       toast.error("Failed to create checkout session");
       console.error("Unexpected session response:", session);
     } catch (error) {
@@ -113,91 +85,139 @@ const CheckOutPage = () => {
   };
 
   return (
-    <div className="w-full  min-h-[78vh] flex bg-white ">
-      {/* left */}
-      <div className="w-[50%] p-4 ">
-        <div>
-          <h3 className="text-lg font-semibold">Choose your address</h3>
-          <div
-            className="w-full h-10 border-dashed border-2 border-blue-300 flex justify-center items-center my-5 "
-            onClick={() => setOpenAddAddress(true)}
-          >
-            <p>Add address</p>
-          </div>
+    <div className="min-h-[78vh] bg-slate-50 py-6">
+      <div className="container mx-auto px-4">
+        <div className="mb-6">
+          <h2 className="text-2xl font-extrabold text-slate-900">Checkout</h2>
+          <p className="text-sm text-slate-600 mt-1">Confirm delivery address and payment method</p>
         </div>
-        <div className="flex flex-col gap-5 mt-5 w-full h-[55vh] overflow-hidden overflow-y-auto">
-          {addressList.map((address, index) => {
-            return (
-              <label htmlFor={"selectedAddress" + index} key={address._id || index}>
-                <div className="border border-green-400 bg-green-100 text-sm p-4 flex gap-1 hover:bg-green-200 ">
-                  <div>
-                    <input
-                      type="radio"
-                      value={index}
-                      checked={selectedAddress === index}
-                      onChange={() => setSelectedAddress(index)}
-                      id={"selectedAddress" + index}
-                      name="address"
-                    />
-                  </div>
-                  <div>
-                    <p>
-                      {address.address_line}, {address.city}
-                    </p>
 
-                    <p>{address.state}</p>
-                    <p>
-                      {address.country}-{address.pincode}
-                    </p>
-                    <p>{address.mobile}</p>
-                  </div>
-                </div>
-              </label>
-            );
-          })}
-        </div>
-      </div>
-      <div className="h-[78vh]  border-r border-gray-200"></div>
-      {/* right */}
-      <div className="w-[50%]  p-4">
-        <div>
-          <h3 className="text-lg font-semibold mb-5">Summary</h3>
-          <div>
-            <div className="border border-green-200 p-2 rounded">
-              <p>Bill details</p>
+        {/* Responsive two-column layout:
+            - mobile: stacked (flex-col)
+            - md and up: side-by-side (flex-row)
+            Keep left ~60% and right ~40% on larger screens so address list has more space */}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* LEFT: Address + other details */}
+          <div className="w-full md:w-3/5 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-slate-800">Choose your address</h3>
+              <button
+                onClick={() => setOpenAddAddress(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400 hover:bg-amber-300 text-sm font-medium shadow-sm"
+              >
+                + Add address
+              </button>
+            </div>
 
-              <div className="p-2">
-                <div className="flex justify-between text-xs">
-                  <p>Total Price</p>
-                  <p>₹{price}.00</p>
-                </div>
-                <div className="flex justify-between text-xs ">
-                  <p>Delivery Charge</p>
-                  <p>Free</p>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <p>Total Items</p>
-                  <p>{cartQuantity} Items</p>
+            <div className="mt-5">
+              <div
+                className="w-full border-2 border-dashed border-blue-100 rounded-lg p-4 flex items-center justify-between text-sm text-slate-600"
+                onClick={() => setOpenAddAddress(true)}
+              >
+                <p className="truncate">Add a new delivery address</p>
+                <p className="text-xs text-slate-500">Click to add</p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <div className="grid gap-4">
+                {/* address list container with nice scroll and spacing */}
+                <div className="flex flex-col gap-3 max-h-[55vh] overflow-y-auto pr-2">
+                  {addressList.length === 0 && (
+                    <div className="text-sm text-slate-500 py-6 text-center">
+                      No saved addresses. Click <span className="font-medium">Add address</span> to continue.
+                    </div>
+                  )}
+
+                  {addressList.map((address, index) => (
+                    <label
+                      htmlFor={"selectedAddress" + index}
+                      key={address._id || index}
+                      className={`cursor-pointer rounded-lg border p-4 flex gap-3 items-start transition-shadow
+                        ${selectedAddress === index ? "bg-green-50 border-green-300 shadow-sm" : "bg-white border-gray-100 hover:shadow"}
+                      `}
+                    >
+                      <input
+                        id={"selectedAddress" + index}
+                        name="address"
+                        type="radio"
+                        value={index}
+                        checked={selectedAddress === index}
+                        onChange={() => setSelectedAddress(index)}
+                        className="mt-1 accent-emerald-600"
+                      />
+
+                      <div className="flex-1 text-sm leading-tight">
+                        <p className="text-slate-800 font-medium">{address.address_line}, {address.city}</p>
+                        <p className="text-slate-600 text-xs mt-1">{address.state} • {address.country} - {address.pincode}</p>
+                        <p className="text-slate-600 text-xs mt-1">📞 {address.mobile}</p>
+                      </div>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full my-2 flex flex-col gap-5  ">
-            <div
-              onClick={handleOnlinePayment}
-              className="w-full h-10 text-white bg-green-800 hover:bg-green-700  flex justify-center items-center rounded-md"
-            >
-              Online Payment
+
+          {/* RIGHT: Summary + Payment */}
+          <aside className="w-full md:w-2/5">
+            <div className="sticky top-24 space-y-4">
+              <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                <h3 className="text-lg font-semibold text-slate-800 mb-3">Order Summary</h3>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm text-slate-600">
+                    <span>Subtotal</span>
+                    <span className="font-medium text-slate-800">₹{price}.00</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-slate-600">
+                    <span>Delivery</span>
+                    <span className="font-medium text-slate-800">Free</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-slate-600">
+                    <span>Items</span>
+                    <span className="font-medium text-slate-800">{cartQuantity} Items</span>
+                  </div>
+
+                  <div className="border-t pt-3 mt-3 flex justify-between items-center">
+                    <p className="text-sm text-slate-600">Total</p>
+                    <p className="text-2xl font-extrabold text-slate-900">₹{price}.00</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                <h4 className="text-md font-semibold text-slate-800 mb-3">Payment</h4>
+
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={handleOnlinePayment}
+                    className="w-full py-3 rounded-md bg-gradient-to-r from-emerald-600 to-green-700 text-white font-semibold shadow hover:from-emerald-500 hover:to-green-600 transition"
+                  >
+                    Pay Online
+                  </button>
+
+                  <button
+                    onClick={handleCashOnDelivery}
+                    className="w-full py-3 rounded-md border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-600 hover:text-white transition"
+                  >
+                    Cash on Delivery
+                  </button>
+
+                  <p className="text-xs text-slate-500 mt-2">
+                    Note: Minimum order ₹50 required for online payment. You will be redirected to the payment gateway.
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center text-xs text-slate-500">
+                <p>By placing an order you agree to our <span className="font-medium">Terms & Conditions</span>.</p>
+              </div>
             </div>
-            <div
-              onClick={handleCashOnDelivery}
-              className="w-full h-10 text-green-800 border-2  flex justify-center items-center rounded-md hover:text-white hover:bg-green-800"
-            >
-              Cash on Delivery
-            </div>
-          </div>
+          </aside>
         </div>
       </div>
+
       {openAddAddress && <AddAddress close={setOpenAddAddress} />}
     </div>
   );

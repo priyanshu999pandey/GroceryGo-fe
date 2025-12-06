@@ -3,25 +3,15 @@ import AccountMenu from "../utils/AccountMenu";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FiExternalLink } from "react-icons/fi";
+import toast from "react-hot-toast";
+import Axios from "../utils/Axios";
 
 const DashBoard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.user);
 
-  const handleLogout = async () => {
-    try {
-      await Axios.post("/logout", {});
-      dispatch(clearUser());
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      toast.success("Logged out successfully!");
-      navigate("/login");
-    } catch (error) {
-      toast.error("Logout failed!");
-      console.error("Logout error:", error);
-    }
-  };
+    
 
   return (
     <section className="flex flex-row bg-white">
@@ -88,12 +78,7 @@ const DashBoard = () => {
           >
             Save address
           </Link>
-          <p
-            className="text-lg text-gray-500 py-2 hover:bg-amber-500 rounded-sm w-full mt-5 px-2 hover:text-white cursor-pointer"
-            onClick={handleLogout}
-          >
-            Logout
-          </p>
+         
         </div>
       </div>
 

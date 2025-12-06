@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
+
 import Search from "./Search";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -66,18 +66,18 @@ const Header = () => {
   }
 
   return (
-    <header className="  h-24 py-2 px-3 lg:h-20 lg:py-4 shadow-md sticky top-0 bg-slate-100 z-70">
+    <header className="  h-24 py-2 px-3 h-30 lg:h-20 lg:py-4 shadow-md sticky top-0 bg-white z-70">
       {!(isSearhPage && isMobile) && (
-        <div className="  w-full container mx-auto  flex justify-between items-center">
+        <div className="  w-full container mx-auto  flex justify-between items-center ">
           {/* logo */}
           <Link to={"/"} className="h-full flex justify-center items-center">
-            <img
-              src={logo}
-              width={160}
-              height={60}
-              className="hidden lg:block"
-            />
-            <img src={logo} width={120} height={60} className="lg:hidden" />
+            
+               <div className="text-3xl flex justify-center items-center ">
+                  <p className="text-yellow-500 font-medium text-5xl">G</p>
+                <p className="text-yellow-500 font-medium">rocery</p>
+                <p className="text-green-700 text-5xl">Go</p>
+               </div>
+          
           </Link>
 
           {/* searchBar */}
@@ -87,9 +87,28 @@ const Header = () => {
           {/* login my cart */}
           <div>
             {/* for mobile */}
-            <div className="lg:hidden" onClick={handleMenu}>
-              <FaRegCircleUser className="w-8 h-8" />
-            </div>
+
+         {!user?._id ? (
+  <button
+    className="lg:hidden px-4 py-2 bg-green-800 text-white rounded-full hover:bg-green-800 transition"
+    onClick={() => navigate("/login")}
+  >
+    Login
+  </button>
+) : (
+  <button
+    className="lg:hidden p-1 rounded-full"
+    onClick={handleMenu}
+    aria-label="User Menu"
+  >
+    <img
+      src={user.avatar}
+      className="w-12 h-12 rounded-full object-cover"
+      alt="user avatar"
+    />
+  </button>
+)}
+
             {/* for desktop */}
 
             <div className="hidden  lg:flex flex-row gap-10 justify-center items-center ">
@@ -103,7 +122,7 @@ const Header = () => {
                         isOpenMenu?(<VscTriangleUp className="w-7 h-7 "  />):(   <VscTriangleDown className="w-7 h-7 " />)
                       }
                        </div>
-                       <div className="absolute top-10 left-[-40px] ">
+                       <div className="absolute top-15 left-[-40px] ">
                             {
                               isOpenMenu &&  <AccountMenu setIsOpenMenu={setIsOpenMenu} />
                             }

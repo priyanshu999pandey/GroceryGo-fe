@@ -101,14 +101,14 @@ const AddToCartButton = ({data}) => {
   return (
     <div>
       {
-        isAvailableCart ? (<div className='flex bg-green-800 text-white gap-4 justify-center items-center px-2 py-1 rounded'>
-           <p className='border-r p-1' onClick={decreaseQty} ><FaMinus /></p>
+        isAvailableCart ? (<div className='flex bg-green-800 text-white gap-3 justify-center items-center  rounded w-22 '>
+           <p className='border-r p-1 ' onClick={decreaseQty} ><FaMinus /></p>
            <p>{qty}</p>
            <p className='border-l p-1 ' onClick={increaseQty}><FaPlus /></p></div>):(          
       <div>
          <button
           onClick={handleADDTocart}
-          className="text-center text-white px-4 py-1 bg-green-800 hover:bg-green-500 rounded "
+          className="text-center text-white px-4  bg-green-800 hover:bg-green-700 rounded "
         >
           {" "}
           Add

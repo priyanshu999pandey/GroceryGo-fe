@@ -43,7 +43,7 @@ const DisplayCartItems = ({ close }) => {
   if (!close) return null;
 
   return (
-    <div className="top-24 fixed bg-black/80 lg:top-0 bottom-0 left-0 right-0 z-90 ">
+    <div className="top-30  fixed bg-black/80 lg:top-0 bottom-0 left-0 right-0 z-90 ">
       <div className="w-screen ml-auto bg-white h-full md:max-w-sm lg:max-w-sm">
 
         <div className="flex items-center justify-between p-2 shadow">
@@ -66,7 +66,7 @@ const DisplayCartItems = ({ close }) => {
 
       {
         cartItems[0]?( <div className="p-2 flex flex-col justify-between  gap-9 ">
-          <div className="flex justify-between items-center bg-blue-100 py-2 rounded-full px-2 text-sm">
+          <div className="flex justify-between items-center bg-green-200   px-4 py-2 rounded ">
             <p className="">Your Total saving</p>
             <p>₹{priceWithoutDiscount}.00</p>
           </div>
@@ -116,10 +116,10 @@ const DisplayCartItems = ({ close }) => {
          
          <div className="bg-green-800 flex justify-between items-center text-white px-4 py-2 rounded ">
             <div>
-              <p className=" text-lg" >₹{price}.00</p>
+              <p className=" " >₹{price}.00</p>
             </div>
             <div className="flex gap-2 items-center" onClick={handleCheckOutPage} >
-              <p className=" text-lg" >proceed</p>
+              <p className=" " >proceed</p>
               <FaArrowRight />
             </div>
          </div>

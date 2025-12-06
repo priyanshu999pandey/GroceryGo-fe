@@ -63,8 +63,8 @@ const ProductListPage = () => {
   return (
     <section className="w-full flex h-[78vh]">
       {/* LEFT SIDEBAR */}
-      <div className="w-[25%] lg:w-[20%] bg-slate-100 overflow-y-auto scrollbar-none">
-        <div className="flex flex-col w-full px-2 py-4">
+      <div className="w-[30%] lg:w-[20%] bg-white overflow-y-auto scrollbar-none">
+        <div className="flex flex-col   w-full ">
           {subCategorybyCategoryWise.map((cat, index) => {
             
             const url = `/${params.category}/${ValidUrlConvert(cat.name)}-${cat._id}`
@@ -72,12 +72,12 @@ const ProductListPage = () => {
             <Link to={url}
             //  onClick={()=>handleClicksubCategory(cat)}
               key={cat._id || index}
-              className={`shadow w-full flex-col items-center gap-3 p-2 rounded lg:flex hover:bg-green-300 ${
+              className={`shadow w-full h-20 flex-col items-center gap-3 p-4 lg:flex hover:bg-green-300 ${
                 cat._id == subCategoryId ? "bg-green-800 text-white" : "bg-transparent"
               }`}
             >
-              <img src={cat.image} className="w-10 h-12 object-cover rounded" alt={cat.name} />
-              <p className="text-xs font-medium">{cat.name}</p>
+              {/* <img src={cat.image} className="w-10 h-12 object-cover rounded" alt={cat.name} /> */}
+              <p className="text-sm  lg:text-md font-medium">{cat.name}</p>
             </Link>
           )
           } )}
@@ -85,7 +85,7 @@ const ProductListPage = () => {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="w-[75%] lg:w-[80%] bg-white overflow-y-auto p-4">
+      <div className="w-[70%] lg:w-[80%] bg-white overflow-y-auto p-4">
         <div className="w-full shadow p-3 text-lg font-semibold">{subCategoryName}</div>
 
         {/* loading / empty states */}
@@ -94,7 +94,7 @@ const ProductListPage = () => {
         ) : data.length === 0 ? (
           <div className="py-8 text-center">No products found.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
             {data.map((pro, index) => (
               <div key={pro._id || index}>
                 <CardProduct data={pro} />
