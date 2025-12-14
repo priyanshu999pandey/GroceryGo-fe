@@ -3,7 +3,7 @@ import axios from "axios";
 
 // ✅ Create axios instance
 const Axios = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // 🔹 Apna backend base URL yahan likho
+  baseURL: `${import.meta.env.VITE_API_URL}/api`, // 🔹 Apna backend base URL yahan likho
   withCredentials: true, // agar backend cookies bhejta hai to use true rakho
 });
 
