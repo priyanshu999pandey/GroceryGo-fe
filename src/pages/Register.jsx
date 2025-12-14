@@ -3,6 +3,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Axios from "../utils/Axios";
 
 const Register = () => {
   const navigate = useNavigate()
@@ -39,8 +40,8 @@ const Register = () => {
     const loadingToastId = toast.loading("Registering...");
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/user/register",
+      const res = await Axios.post(
+        "/user/register",
         data,
         {
           withCredentials: true,

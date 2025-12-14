@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../store/userSlice";
+import Axios from "../utils/Axios";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -39,8 +40,8 @@ const Login = () => {
     const loadingToastId = toast.loading("login...");
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/user/login",
+      const res = await Axios.post(
+        "/user/login",
         data,
         {
           withCredentials: true,
