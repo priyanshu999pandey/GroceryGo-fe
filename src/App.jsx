@@ -93,7 +93,7 @@ function App() {
           <Route path='/search' element={<SearchPage></SearchPage>} />
           <Route path='/register' element={<Register />} />
          
-          <Route path='/login' element={<Login />} />
+          <Route path='login' element={<Login />} />
           <Route path='/otp-verification' element={<OtpVerification />} />
           <Route path='/forget-password' element={<ForgetPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
