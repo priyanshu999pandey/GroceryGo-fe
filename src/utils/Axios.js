@@ -53,7 +53,7 @@ Axios.interceptors.response.use((response)=>{ return response},
 
 const refreshAccessToken = async (refreshToken) => {
   try {
-    const response = await Axios.put( `${import.meta.env.VITE_API_URL}/api/user/refresh-token`,{},                      // PUT body empty — backend sirf header/cookie se token read karega
+    const response = await Axios.put( `/user/refresh-token`,{},                      // PUT body empty — backend sirf header/cookie se token read karega
       {
         headers: {
           Authorization: `Bearer ${refreshToken}`,
