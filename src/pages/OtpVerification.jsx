@@ -4,6 +4,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Axios from '../utils/Axios';
 
 const OtpVerification = () => {
   const location = useLocation();
@@ -39,8 +40,8 @@ const OtpVerification = () => {
     const loadingToastId = toast.loading("login...");
 
     try {
-      const res = await axios.put(
-        "http://localhost:8080/api/user/verify-forgot-password",
+      const res = await Axios.put(
+        "/user/verify-forgot-password",
         {
           otp:data.join(""),
           email:location?.state?.email

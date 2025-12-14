@@ -3,6 +3,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import Axios from "../utils/Axios";
 
 const ResetPassword = () => {
   const navigate = useNavigate()
@@ -61,8 +62,8 @@ const ResetPassword = () => {
     const loadingToastId = toast.loading("Registering...");
 
     try {
-      const res = await axios.put(
-        "http://localhost:8080/api/user/reset-password",
+      const res = await Axios.put(
+        "/user/reset-password",
         {
           email:data.email,
           newPassword:data.password,
