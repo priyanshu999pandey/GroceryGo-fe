@@ -99,26 +99,56 @@ const AddToCartButton = ({data}) => {
 
 
   return (
-    <div>
-      {
-        isAvailableCart ? (<div className='flex bg-green-800 text-white gap-3 justify-center items-center  rounded w-22 '>
-           <p className='border-r p-1 ' onClick={decreaseQty} ><FaMinus /></p>
-           <p>{qty}</p>
-           <p className='border-l p-1 ' onClick={increaseQty}><FaPlus /></p></div>):(          
-      <div>
-         <button
-          onClick={handleADDTocart}
-          className="text-center text-white px-4  bg-green-800 hover:bg-green-700 rounded "
+  <div>
+    {isAvailableCart ? (
+      <div
+        className="
+          flex items-center justify-between
+          bg-gradient-to-r from-green-600 to-emerald-500
+          text-white rounded-full
+          px-3 py-1.5
+          min-w-[95px]
+          shadow-lg
+          backdrop-blur
+        "
+      >
+        <button
+          onClick={decreaseQty}
+          className="p-1 rounded-full hover:bg-white/20 transition active:scale-90"
         >
-          {" "}
-          Add
+          <FaMinus size={12} />
+        </button>
+
+        <span className="font-semibold text-sm">{qty}</span>
+
+        <button
+          onClick={increaseQty}
+          className="p-1 rounded-full hover:bg-white/20 transition active:scale-90"
+        >
+          <FaPlus size={12} />
         </button>
       </div>
-        )
-      }
+    ) : (
+      <button
+        onClick={handleADDTocart}
+        className="
+          px-5 py-1.5
+          rounded-full
+          text-sm font-semibold
+          text-white
+          bg-gradient-to-r from-green-600 to-emerald-500
+          hover:from-green-500 hover:to-emerald-400
+          shadow-md hover:shadow-lg
+          transition-all duration-200
+          active:scale-95
+        "
+      >
+        + Add
+      </button>
+    )}
+  </div>
+);
 
-    </div>
-  )
 }
 
 export default AddToCartButton
