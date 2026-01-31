@@ -84,7 +84,7 @@ const Login = () => {
     <div className="w-full h-screen bg-slate-200 flex items-center justify-center py-8 px-4">
       {/* Card: max width controls layout on large screens, w-full lets it shrink on small screens */}
       <div className="w-full max-w-[450px] bg-white flex flex-col items-center py-6 px-4 sm:px-6 rounded-md shadow">
-        <p className="mb-2 text-lg sm:text-xl font-medium text-center">Login, On Blinkeyit!!!</p>
+        <p className="mb-2 text-lg sm:text-xl font-medium text-center">Login, On GroceryGo!!!</p>
 
         <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
          
